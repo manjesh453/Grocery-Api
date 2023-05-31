@@ -1,18 +1,18 @@
 package com.grocery.payloads;
 
+
 import com.grocery.entities.Category;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-
+@Getter
 public class SubCatDto {
 
 	
 	private Integer subId;
 	private String subName;
 	
-	private Category category;
+	private CategoryDto category;
 }

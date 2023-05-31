@@ -1,6 +1,8 @@
 package com.grocery.entities;
 
 
+import com.grocery.payloads.CategoryDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

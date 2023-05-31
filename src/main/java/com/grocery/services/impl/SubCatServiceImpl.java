@@ -38,7 +38,7 @@ public class SubCatServiceImpl implements SubCatService{
 		Category cat=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "categoryId", categoryId));
 		SubCategory subCat=this.subcatRepo.findById(subcatId).orElseThrow(()->new ResourceNotFoundException("SubCategory", "SubCategoryId", subcatId));
 		subCat.setSubName(subcat.getSubName());
-		subCat.setCategory(subcat.getCategory());
+		subCat.setCategory(cat);
 		SubCategory updateSub=this.subcatRepo.save(subCat);
 		return this.modelMapper.map(updateSub,SubCatDto.class);
 	}
@@ -66,7 +66,7 @@ public class SubCatServiceImpl implements SubCatService{
 	public List<SubCatDto> getSubCategoryByCategory(Integer categoryId) {
 		Category cat=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "categoryId", categoryId));
 		List<SubCategory>list=this.subcatRepo.findByCategory(cat);
-		List<SubCatDto>subcat=list.stream().map((subcate)->this.modelMapper.map(list,SubCatDto.class)).collect(Collectors.toList());
+		List<SubCatDto>subcat=list.stream().map((subcate)->this.modelMapper.map(subcate,SubCatDto.class)).collect(Collectors.toList());
 		return subcat;
 	}
 
