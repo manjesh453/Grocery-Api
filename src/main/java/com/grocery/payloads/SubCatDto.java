@@ -1,8 +1,5 @@
 package com.grocery.payloads;
 
-
-import com.grocery.entities.Category;
-
 import lombok.Getter;
 import lombok.Setter;
 
