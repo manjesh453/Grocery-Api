@@ -22,6 +22,7 @@ public class CategoryController {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
 	@PostMapping("/")
 	public ResponseEntity<CategoryDto>createCategory(@RequestBody CategoryDto categoryDto){
 		CategoryDto catDto=this.categoryService.createCategory(categoryDto);

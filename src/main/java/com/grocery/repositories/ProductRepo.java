@@ -8,6 +8,4 @@ import com.grocery.entities.Product;
 import com.grocery.entities.SubCategory;
 
 public interface ProductRepo extends JpaRepository<Product, Integer> {
-
-	List<Product>findBySubCategory(SubCategory subCat);
-	}
+}
