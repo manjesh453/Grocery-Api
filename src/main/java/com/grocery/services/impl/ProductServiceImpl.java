@@ -1,6 +1,7 @@
 package com.grocery.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
 	private SubCategoryRepo subCatRepo;
     @Autowired
     private ProductRepo productRepo;
-    
+    @Autowired
     private ModelMapper modelMapper;
     
 	
@@ -36,38 +37,52 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ProductDto updateProduct(ProductDto productDto, Integer subCatId, String filename, Integer productId) {
-		// TODO Auto-generated method stub
-		return null;
+		Product product=this.productRepo.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product", "ProductId", productId));
+		SubCategory subCat=this.subCatRepo.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("SubCategory", "SubCatId", subCatId));
+		product.setProductImage(filename);
+		product.setSubCat(subCat);
+		product.setProductDiscount(productDto.getProductDiscount());
+		product.setProductName(productDto.getProductName());
+		product.setProductPrice(productDto.getProductPrice());
+		Product updatedProduct=this.productRepo.save(product);
+		return this.modelMapper.map(updatedProduct, ProductDto.class);
 	}
 
 	@Override
 	public void deleteProduct(Integer productId) {
-		// TODO Auto-generated method stub
+		this.productRepo.deleteById(productId);
 		
 	}
 
 	@Override
 	public ProductDto getProductById(Integer productId) {
-		// TODO Auto-generated method stub
-		return null;
+		Product pro=this.productRepo.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product", "ProductId", productId));
+		return this.modelMapper.map(pro,ProductDto.class);
 	}
 
 	@Override
 	public List<ProductDto> getAllProduct() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product>list=this.productRepo.findAll();
+		List<ProductDto>product=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return product;
 	}
 
 	@Override
 	public List<ProductDto> getProductBySubCategory(Integer subCatId) {
-		// TODO Auto-generated method stub
-		return null;
+		SubCategory subCat=this.subCatRepo.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("SubCategory", "SubCategoryId", subCatId));
+		List<Product>list=this.productRepo.findBySubCat(subCat);
+		List<ProductDto>product=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return product;
 	}
 
 	@Override
 	public List<ProductDto> getProductByCategory(Integer categoryId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public ProductDto proToDto(Product pro) {
+		return this.modelMapper.map(pro, ProductDto.class);
 	}
 
 }
