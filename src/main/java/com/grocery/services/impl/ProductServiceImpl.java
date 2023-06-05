@@ -31,6 +31,10 @@ public class ProductServiceImpl implements ProductService {
 		Product product=this.modelMapper.map(productDto, Product.class);
 		product.setProductImage(filename);
 		product.setSubCat(subCat);
+		float proPrice=product.getProductPrice();
+		float proDis=product.getProductDiscount();
+		float proAmt=this.actualAmt(proPrice, proDis);
+		product.setProductAmount(proAmt);
 		Product newProduct=this.productRepo.save(product);
 		return this.modelMapper.map(newProduct, ProductDto.class);
 	}
@@ -44,6 +48,10 @@ public class ProductServiceImpl implements ProductService {
 		product.setProductDiscount(productDto.getProductDiscount());
 		product.setProductName(productDto.getProductName());
 		product.setProductPrice(productDto.getProductPrice());
+		float proPrice=product.getProductPrice();
+		float proDis=product.getProductDiscount();
+		float proAmt=this.actualAmt(proPrice, proDis);
+		product.setProductAmount(proAmt);
 		Product updatedProduct=this.productRepo.save(product);
 		return this.modelMapper.map(updatedProduct, ProductDto.class);
 	}
@@ -70,9 +78,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDto> getProductBySubCategory(Integer subCatId) {
 		SubCategory subCat=this.subCatRepo.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("SubCategory", "SubCategoryId", subCatId));
-		List<Product>list=this.productRepo.findBySubCat(subCat);
-		List<ProductDto>product=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
-		return product;
+		//List<Product>list=this.productRepo.findBySubCat(subCat);
+		//List<ProductDto>product=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return null;
 	}
 
 	@Override
@@ -83,6 +91,11 @@ public class ProductServiceImpl implements ProductService {
 	
 	public ProductDto proToDto(Product pro) {
 		return this.modelMapper.map(pro, ProductDto.class);
+	}
+	
+	public float actualAmt(float price,float discount ) {
+		 float actualAmount = price - (price * discount / 100);
+	        return actualAmount;
 	}
 
 }

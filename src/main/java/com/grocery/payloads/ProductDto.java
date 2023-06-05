@@ -17,5 +17,7 @@ public class ProductDto {
 	
 	private String productImage;
 	
+	private String productAmount;
+	
 	private SubCatDto SubCat;
 }
