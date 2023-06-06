@@ -5,7 +5,7 @@ import com.grocery.payloads.CartDto;
 
 public interface CartService {
 
-	CartDto createCart(CartDto cartDto ,Integer productId,Integer quantity);
+	CartDto createCart(CartDto cartDto ,Integer productId);
 	
 	CartDto updateCart(CartDto cartDto,Integer cartId);
 	

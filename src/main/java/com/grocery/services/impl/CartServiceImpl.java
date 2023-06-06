@@ -14,8 +14,8 @@ import com.grocery.payloads.CartDto;
 import com.grocery.repositories.CartRepo;
 import com.grocery.repositories.ProductRepo;
 import com.grocery.services.CartService;
-@Service
 
+@Service
 public class CartServiceImpl implements CartService{
 	@Autowired
 	private CartRepo cartRepo;
@@ -25,13 +25,12 @@ public class CartServiceImpl implements CartService{
 	private ModelMapper modelMapper;
 
 	@Override
-	public CartDto createCart(CartDto cartDto,Integer productId, Integer quantity) {
+	public CartDto createCart(CartDto cartDto,Integer productId) {
 		Product product=this.productRepo.findById(productId).orElseThrow(()->new ResourceNotFoundException("Product", "ProductId", productId));
 		Cart cart=this.modelMapper.map(cartDto,Cart.class);
-		cart.setCartQuantity(quantity);
 		cart.setProduct(product);
+		Integer quant=cart.getCartQuantity();
 		float proPri=product.getProductAmount();
-		Integer quant=cartDto.getCartQuantity();
 		float total=this.totalAmt(quant, proPri);
 		cart.setCartAmount(total);
 		Cart newCart=this.cartRepo.save(cart);
@@ -71,8 +70,9 @@ public class CartServiceImpl implements CartService{
 	
 	private float totalAmt(Integer quantity,float amt) {
 		
-		return quantity*amt;
+		float amount=quantity*amt;
 		
+		return amount;
 	}
 
 }
