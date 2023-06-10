@@ -20,7 +20,7 @@ public class CartController {
 	@PostMapping("/Product/{productId}/")
 	public ResponseEntity<CartDto>createCart(@RequestBody CartDto cartDto,@PathVariable Integer productId){
 		CartDto newCart=this.cartService.createCart(cartDto, productId);
-		return new ResponseEntity<CartDto>(newCart,HttpStatus.CREATED);
+		return new ResponseEntity<>(newCart,HttpStatus.CREATED);
 	}
 	
 

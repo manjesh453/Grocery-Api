@@ -17,6 +17,8 @@ public class UserDto {
 	
 	private String userEmail;
 	
+	private String userType;
+	
 	private String userContact;
 	
 	private String userAddress;
