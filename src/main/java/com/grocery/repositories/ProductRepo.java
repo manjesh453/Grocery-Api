@@ -13,5 +13,5 @@ import com.grocery.entities.SubCategory;
 public interface ProductRepo extends JpaRepository<Product, Integer> {
 
 	//@Query("SELECT p FROM Product p WHERE p.subCat=:subCat")
-//List<Product>findBySubCat(SubCategory subCat);
+//List<Product>findBySubCategory(SubCategory subCat);
 }

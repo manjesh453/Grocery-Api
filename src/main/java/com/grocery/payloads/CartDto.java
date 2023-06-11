@@ -1,6 +1,6 @@
 package com.grocery.payloads;
 
-import com.grocery.entities.Product;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,5 +12,7 @@ public class CartDto {
 	
 	private float cartAmount;
 	
-	private Product product;
+	private ProductDto product;
+	
+	private UserDto user;
 }

@@ -5,7 +5,7 @@ import com.grocery.payloads.CartDto;
 
 public interface CartService {
 
-	CartDto createCart(CartDto cartDto ,Integer productId);
+	CartDto createCart(CartDto cartDto ,Integer productId,Integer userId);
 	
 	CartDto updateCart(CartDto cartDto,Integer cartId);
 	
@@ -14,5 +14,7 @@ public interface CartService {
 	CartDto getCartById(Integer cartId);
 	
 	void deleteItem(Integer cartId);
+	
+	List<CartDto>getCartByUser(Integer userId);
 	
 }
