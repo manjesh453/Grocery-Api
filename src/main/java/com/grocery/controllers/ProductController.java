@@ -1,16 +1,17 @@
 package com.grocery.controllers;
 
 
-import java.awt.PageAttributes.MediaType;
+//import java.awt.PageAttributes.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.util.StreamUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,13 +40,13 @@ public class ProductController {
 	@Value("${project.image}")
 	private String path;
 	
-	@PostMapping(value="/SubCategory/{subCatId}/")
+	@PostMapping(value="/sub/{subCatId}/")
 	public ResponseEntity<ProductDto> createProduct(@RequestParam("image")MultipartFile image,@RequestPart ProductDto productDto,@PathVariable Integer subCatId) throws IOException{
 		String filename=this.fileService.uploadImage(path, image);
 		ProductDto newProduct=this.productService.createProduct(productDto, subCatId, filename);
 		return new ResponseEntity<>(newProduct,HttpStatus.CREATED);
 	}
-	@PutMapping(value="/SubCategory/{subCatId}/Product/{productId}/")
+	@PutMapping(value="/sub/{subCatId}/Product/{productId}/")
 	public ResponseEntity<ProductDto>updateProduct(@RequestParam("image")MultipartFile image,@RequestPart ProductDto productDto,@PathVariable Integer subCatId,@PathVariable Integer productId) throws IOException{
 		String filename=this.fileService.uploadImage(path, image);
 		ProductDto updateProduct=this.productService.updateProduct(productDto, subCatId, filename, productId);
@@ -66,17 +67,21 @@ public class ProductController {
 	public ResponseEntity<List<ProductDto>>getAll(){
 		return ResponseEntity.ok(this.productService.getAllProduct());
 	}
-	@GetMapping("/SubCategory/{subCatId}/Product/")
+	@GetMapping("/sub/{subCatId}/Product/")
 	public ResponseEntity<List<ProductDto>>getBySubCategory(@PathVariable Integer subCatId){
-		return ResponseEntity.ok(this.productService.getProductByCategory(subCatId));
-		
+		return ResponseEntity.ok(this.productService.getProductBySubCategory(subCatId));
 	}
-	/*@GetMapping(value = "/product/image/{imageName}",produces=MediaType.IMAGE_JPEG_VALUE)
+	@GetMapping("/cat/{categoryId}/Product/")
+	public ResponseEntity<List<ProductDto>>getByCategory(@PathVariable Integer categoryId){
+		return ResponseEntity.ok(this.productService.getProductByCategory(categoryId));
+	}
+	
+	@GetMapping(value = "/product/image/{imageName}",produces=MediaType.IMAGE_JPEG_VALUE )
 	public void downloadImage(@PathVariable("imageName") String imageName,HttpServletResponse response)throws IOException {
 		InputStream resource=this.fileService.getResource(path, imageName);
 		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 		StreamUtils.copy(resource,response.getOutputStream());
-	} */
+	} 
 }
 
 

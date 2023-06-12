@@ -7,10 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grocery.entities.Category;
 import com.grocery.entities.Product;
 import com.grocery.entities.SubCategory;
 import com.grocery.exceptions.ResourceNotFoundException;
 import com.grocery.payloads.ProductDto;
+import com.grocery.repositories.CategoryRepo;
 import com.grocery.repositories.ProductRepo;
 import com.grocery.repositories.SubCategoryRepo;
 import com.grocery.services.ProductService;
@@ -21,6 +23,8 @@ public class ProductServiceImpl implements ProductService {
 	private SubCategoryRepo subCatRepo;
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private CategoryRepo catRepo;
     @Autowired
     private ModelMapper modelMapper;
     
@@ -78,15 +82,18 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDto> getProductBySubCategory(Integer subCatId) {
 		SubCategory subCat=this.subCatRepo.findById(subCatId).orElseThrow(()->new ResourceNotFoundException("SubCategory", "SubCategoryId", subCatId));
-		//List<Product>list=this.productRepo.findBySubCat(subCat);
-		//List<ProductDto>product=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
-		return null;
+		List<Product> p=this.productRepo.findBySubCat(subCat);
+		List<ProductDto>product=p.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return product;
 	}
 
 	@Override
 	public List<ProductDto> getProductByCategory(Integer categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+	Category cat=this.catRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "CategoryId", categoryId));
+		List<Product>p=this.productRepo.findByCategory(cat);
+		List<ProductDto>product=p.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return product;
+		
 	}
 	
 	public ProductDto proToDto(Product pro) {
