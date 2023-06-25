@@ -105,4 +105,11 @@ public class ProductServiceImpl implements ProductService {
 	        return actualAmount;
 	}
 
+	@Override
+	public List<ProductDto> findByKeyword(String keyword) {
+		List<Product>list=this.productRepo.findBykeyword(keyword);
+		List<ProductDto>productDto=list.stream().map(product1->this.proToDto(product1)).collect(Collectors.toList());
+		return productDto;
+	}
+
 }

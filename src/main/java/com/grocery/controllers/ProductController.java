@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.hibernate.event.spi.PostDeleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ import com.grocery.services.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/product/")
+@RequestMapping("/product")
 public class ProductController {
 	@Autowired
 	private ProductService productService;
@@ -76,12 +77,17 @@ public class ProductController {
 		return ResponseEntity.ok(this.productService.getProductByCategory(categoryId));
 	}
 	
-	@GetMapping(value = "/product/image/{imageName}",produces=MediaType.IMAGE_JPEG_VALUE )
+	@GetMapping(value = "/image/{imageName}",produces=MediaType.IMAGE_JPEG_VALUE )
 	public void downloadImage(@PathVariable("imageName") String imageName,HttpServletResponse response)throws IOException {
 		InputStream resource=this.fileService.getResource(path, imageName);
 		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 		StreamUtils.copy(resource,response.getOutputStream());
 	} 
+	
+	@GetMapping("/keyword/{Keyword}/")
+	public ResponseEntity<List<ProductDto>>getByKeyword(@PathVariable String Keyword){
+		return ResponseEntity.ok(this.productService.findByKeyword(Keyword));
+	}
 }
 
 

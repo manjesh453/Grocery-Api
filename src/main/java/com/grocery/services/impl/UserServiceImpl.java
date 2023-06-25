@@ -4,10 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.grocery.config.AppConstant;
+import com.grocery.entities.Role;
 import com.grocery.entities.User;
 import com.grocery.exceptions.ResourceNotFoundException;
 import com.grocery.payloads.UserDto;
+import com.grocery.repositories.RoleRepo;
 import com.grocery.repositories.UserRepo;
 import com.grocery.services.UserService;
 
@@ -19,6 +24,10 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private RoleRepo roleRepo;
 
 	@Override
 	public UserDto createUsers(UserDto userDto) {
@@ -50,9 +59,8 @@ public class UserServiceImpl implements UserService{
 	public UserDto updateUser(UserDto userDto, Integer userId) {
 		User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User", "UserId", userId));
 		user.setUserName(userDto.getUserName());
-		user.setUserType(userDto.getUserType());
 		user.setUserPassword(userDto.getUserPassword());
-		user.setUserEmail(userDto.getUserEmail());
+		user.setEmail(userDto.getEmail());
 		user.setUserContact(userDto.getUserContact());
 		user.setUserAddress(userDto.getUserAddress());
 		User updateUser=this.userRepo.save(user);
@@ -63,6 +71,15 @@ public class UserServiceImpl implements UserService{
 	
 	public UserDto userToDto(User user) {
 		return this.modelMapper.map(user, UserDto.class);
+	}
+
+	public UserDto registerNewUser(UserDto userDto) {
+		User user=this.modelMapper.map(userDto, User.class);
+		user.setUserPassword(this.passwordEncoder.encode(user.getPassword()));
+		Role role=this.roleRepo.findById(AppConstant.Normal_USER).get();
+		user.getRoles().add(role);
+		User newUser=this.userRepo.save(user);
+		return this.modelMapper.map(newUser, UserDto.class);
 	}
 
 }

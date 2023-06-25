@@ -20,5 +20,5 @@ public interface ProductService {
 	
 	List<ProductDto>getProductByCategory(Integer categoryId);
 	
-	
+	List<ProductDto>findByKeyword(String keyword);
 }

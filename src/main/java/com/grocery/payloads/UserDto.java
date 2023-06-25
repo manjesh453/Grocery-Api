@@ -1,5 +1,8 @@
 package com.grocery.payloads;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,11 +18,11 @@ public class UserDto {
 	
 	private String userPassword;
 	
-	private String userEmail;
-	
-	private String userType;
+	private String email;
 	
 	private String userContact;
 	
 	private String userAddress;
+	
+	private Set<RoleDto>roles=new HashSet<>();
 }
