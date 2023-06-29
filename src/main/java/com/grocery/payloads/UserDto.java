@@ -14,15 +14,15 @@ public class UserDto {
 
 	private Integer id;
 	
-    private String userName;
+    private String name;
 	
-	private String userPassword;
+	private String password;
 	
 	private String email;
 	
-	private String userContact;
+	private String contact;
 	
-	private String userAddress;
+	private String address;
 	
 	private Set<RoleDto>roles=new HashSet<>();
 }

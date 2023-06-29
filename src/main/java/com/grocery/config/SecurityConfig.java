@@ -40,14 +40,10 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
 	   http
        .csrf(csrf->csrf.disable())
-       .authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
-       .requestMatchers(HttpMethod.GET).permitAll()
-       .anyRequest()
-       .authenticated()
-       .and()
-       .exceptionHandling()
-       .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-       .and()
+       .authorizeHttpRequests(auth->auth.requestMatchers("/api/auth/**").permitAll()
+    		   .requestMatchers(HttpMethod.GET).permitAll()
+    		   .anyRequest().authenticated())
+       .exceptionHandling(exception->exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
        .sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
        
 

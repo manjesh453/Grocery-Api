@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenHelper {
 public static final long JWT_TOKEN_VALIDITY=5*60*60;
@@ -31,7 +32,9 @@ public static final long JWT_TOKEN_VALIDITY=5*60*60;
     }
  
 	private Claims getAllClaimsFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		//return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		
+		return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes())).build().parseClaimsJws(token).getBody();
 	}
 	
 	private Boolean isTokenExpired(String token) {
@@ -41,6 +44,7 @@ public static final long JWT_TOKEN_VALIDITY=5*60*60;
 	
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object>claims=new HashMap<>();
+		System.out.println("*///////////********///////////***********///////"+userDetails.getUsername());
 		return deGenerateToken(claims,userDetails.getUsername());
 	}
 

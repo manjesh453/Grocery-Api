@@ -58,11 +58,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserDto updateUser(UserDto userDto, Integer userId) {
 		User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User", "UserId", userId));
-		user.setUserName(userDto.getUserName());
-		user.setUserPassword(userDto.getUserPassword());
+		user.setName(userDto.getName());
+		user.setPassword(userDto.getPassword());
 		user.setEmail(userDto.getEmail());
-		user.setUserContact(userDto.getUserContact());
-		user.setUserAddress(userDto.getUserAddress());
+		user.setContact(userDto.getContact());
+		user.setAddress(userDto.getAddress());
 		User updateUser=this.userRepo.save(user);
 		UserDto userDto1=this.modelMapper.map(updateUser, UserDto.class);
 		return userDto1;
@@ -75,7 +75,8 @@ public class UserServiceImpl implements UserService{
 
 	public UserDto registerNewUser(UserDto userDto) {
 		User user=this.modelMapper.map(userDto, User.class);
-		user.setUserPassword(this.passwordEncoder.encode(user.getPassword()));
+		user.setName(userDto.getName());
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		Role role=this.roleRepo.findById(AppConstant.Normal_USER).get();
 		user.getRoles().add(role);
 		User newUser=this.userRepo.save(user);

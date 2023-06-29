@@ -35,15 +35,15 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
 	
-	private String userName;
+	private String name;
 	
-	private String userPassword;
+	private String password;
 	
 	private String email;
 	
-	private String userContact;
+	private String contact;
 	
-	private String userAddress;
+	private String address;
 	
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<Cart> cart=new ArrayList<>();
@@ -60,11 +60,7 @@ public class User implements UserDetails{
 		return auth;
 	}
 
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return this.userPassword;
-	}
+	
 
 	@Override
 	public String getUsername() {
@@ -94,6 +90,14 @@ public class User implements UserDetails{
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.password;
 	}
 
 }
