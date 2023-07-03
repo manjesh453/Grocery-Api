@@ -19,36 +19,36 @@ import com.grocery.payloads.SubCatDto;
 import com.grocery.services.SubCatService;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/subcategory")
 public class SubCategoryController {
     @Autowired
 	private SubCatService subservice;
 	
-    @PostMapping("/category/{categoryId}/subcategory")
+    @PostMapping("/category/{categoryId}")
 	public ResponseEntity<SubCatDto>createSubCategory(@RequestBody SubCatDto subcat,@PathVariable Integer categoryId){
 		SubCatDto newSub=this.subservice.createSubCategory(subcat, categoryId);
 		return new ResponseEntity<>(newSub,HttpStatus.CREATED);
 	}
-    @PutMapping("/category/{categoryId}/subcategory/{subcatId}/")
+    @PutMapping("/category/{categoryId}/{subcatId}")
     public ResponseEntity<SubCatDto>updateSubCategory(@RequestBody SubCatDto subcat,@PathVariable Integer subcatId,@PathVariable Integer categoryId) {
     	SubCatDto updateSubCat=this.subservice.updateSubCategory(subcat, subcatId, categoryId);
     	return ResponseEntity.ok(updateSubCat);
     }
-    @DeleteMapping("/subcategory/{subCatId}/")
+    @DeleteMapping("/{subCatId}/")
     public ResponseEntity<?>deleteSubCategory(@PathVariable Integer subCatId){
     	this.subservice.deleteSubCategory(subCatId);
     	return new ResponseEntity<ApiResponse>(new ApiResponse("SubCategory successfully Deleted", true),HttpStatus.OK);
     }
-	@GetMapping("/subcategory/{subcatId}/")	
+	@GetMapping("/{subcatId}/")	
     public ResponseEntity<SubCatDto> getSubCatById(@PathVariable Integer subcatId){
     	SubCatDto subcat=this.subservice.getSubCatById(subcatId);
     	return ResponseEntity.ok(subcat);
     }
-	@GetMapping("/subcategory/")
+	@GetMapping("/")
 	public ResponseEntity<List<SubCatDto>> getAllSubCategory() {
 		return ResponseEntity.ok(this.subservice.getAllSubCategory());
 	}
-	@GetMapping("/category/{categoryId}/subcategory/")
+	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<List<SubCatDto>> getSubCategoryByCategory(@PathVariable Integer categoryId){
 		return ResponseEntity.ok(this.subservice.getSubCategoryByCategory(categoryId));
 	}
