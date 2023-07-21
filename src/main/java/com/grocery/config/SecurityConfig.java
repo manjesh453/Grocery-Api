@@ -1,6 +1,8 @@
 package com.grocery.config;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.grocery.security.CustomerUserDetailService;
@@ -38,9 +43,9 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-	   http
+		http
        .csrf(csrf->csrf.disable())
-       .authorizeHttpRequests(auth->auth.requestMatchers("/api/auth/**").permitAll()
+       .authorizeHttpRequests(auth->auth.requestMatchers("/api/auth/**").permitAll()    		  
     		   .requestMatchers(HttpMethod.GET).permitAll()
     		   .anyRequest().authenticated())
        .exceptionHandling(exception->exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
@@ -74,5 +79,27 @@ public class SecurityConfig {
    @Bean
    public PasswordEncoder passwordEncoder() {
 	   return new BCryptPasswordEncoder();
+   }
+   
+   @Bean
+   public FilterRegistrationBean<CorsFilter> coresFilter() {
+	   UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+       CorsConfiguration corsConfiguration = new CorsConfiguration();
+       corsConfiguration.setAllowCredentials(true);
+       corsConfiguration.addAllowedOriginPattern("*");
+       corsConfiguration.addAllowedHeader("Authorization");
+       corsConfiguration.addAllowedHeader("Content-Type");
+       corsConfiguration.addAllowedMethod("OPTIONS");
+       corsConfiguration.addAllowedHeader("Accept");
+       corsConfiguration.addAllowedMethod("POST");
+       corsConfiguration.addAllowedMethod("PUT");
+       corsConfiguration.addAllowedMethod("GET");
+       corsConfiguration.addAllowedMethod("DELETE");
+       corsConfiguration.setMaxAge(3600L);
+
+       source.registerCorsConfiguration("/**", corsConfiguration);
+       FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+       bean.setOrder(0);
+       return bean;
    }
 }
