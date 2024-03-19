@@ -9,5 +9,6 @@ import com.grocery.entities.SubCategory;
 public interface SubCategoryRepo extends JpaRepository<SubCategory, Integer>{
 
 	List<SubCategory>findByCategory(Category category);
+	
 
 }

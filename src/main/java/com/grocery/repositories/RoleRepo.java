@@ -6,4 +6,5 @@ import com.grocery.entities.Role;
 
 public interface RoleRepo extends JpaRepository<Role, Integer>{
 
+
 }
